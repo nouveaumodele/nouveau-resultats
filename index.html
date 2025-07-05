@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -11,24 +10,12 @@
             background-color: #f2f2f2;
             text-align: center;
         }
-        .header {
-            background-color: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-        }
-        .logo {
-            height: 100px;
-            margin-bottom: 10px;
-        }
         h1 {
             color: #333;
-            margin: 0;
         }
         input, button {
             padding: 10px;
-            margin: 5px 0;
+            margin: 5px;
             font-size: 16px;
         }
         #resultat {
@@ -37,23 +24,31 @@
             background-color: #fff;
             border-left: 5px solid #4CAF50;
             display: inline-block;
+            text-align: left;
         }
         .error {
             border-left: 5px solid #f44336;
+        }
+        #logo {
+            width: 100px;
+            margin-bottom: 20px;
+        }
+        .infos {
+            margin-bottom: 30px;
         }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <img src="logo.png" alt="Logo Auto-école" class="logo">
-        <h2 style="margin: 5px 0;">Auto-école Teyssir</h2>
-        <p style="margin: 0;">Adresse : Rue Mohemed khmisti, Misserghin - Algérie</p>
-        <h1>Consultez votre résultat d'examen</h1>
+    <img src="logo.png" id="logo" alt="Logo Auto-École">
+    <div class="infos">
+        <h2>Auto-école Teyssir</h2>
+        <p>Adresse : Rue mohamed khmisti, Misserghin</p>
     </div>
 
+    <h1>Consultez votre résultat d'examen</h1>
     <p>Entrez votre numéro d'inscription :</p>
-    <input type="text" id="numero" placeholder="Ex: 1234">
+    <input type="text" id="numero" placeholder="Ex: 0611">
     <button onclick="chercher()">Rechercher</button>
 
     <div id="resultat"></div>
@@ -78,7 +73,6 @@
                 complete: function(results) {
                     const data = results.data;
                     const candidat = data.find(c => c.Numéro === numero);
-
                     if (candidat) {
                         resultatDiv.innerHTML = `
                             <strong>Nom :</strong> ${candidat.Nom}<br>
@@ -100,3 +94,4 @@
 
 </body>
 </html>
+
