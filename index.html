@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Institut El-Feth - Résultats</title>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; margin: 40px; background-color: #f4f4f4; }
+    .container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    .header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+    .logo { max-width: 120px; }
+    h1 { margin-bottom: 5px; }
+    p { margin-top: 0; }
+    .input-section { margin-top: 20px; }
+    input { padding: 10px; width: 250px; }
+    button { padding: 10px 20px; margin-left: 10px; }
+    #resultat { margin-top: 30px; padding: 15px; background-color: #e8f5e9; border-left: 5px solid #4CAF50; }
+    .error { background-color: #fdecea; border-left-color: #f44336; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <img src="img/logo.png" alt="Logo" class="logo">
+      <div>
+        <h1>Institut El-Feth – Oran</h1>
+        <p>12 Rue des Frères Zerhouni, Oran<br>📞 0770 33 44 55</p>
+      </div>
+    </div>
+
+    <h2>📝 Résultats des élèves / نتائج المتعلمين</h2>
+    <div class="input-section">
+      <label for="numero">Numéro d'inscription / رقم التسجيل :</label><br>
+      <input type="text" id="numero" placeholder="Ex: 2033">
+      <button onclick="chercher()">Rechercher</button>
+    </div>
+
+    <div id="resultat"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
+  <script>
+    function chercher() {
+      const numero = document.getElementById("numero").value.trim();
+      const resDiv = document.getElementById("resultat");
+      resDiv.innerHTML = "";
+      resDiv.classList.remove("error");
+
+      if (!numero) {
+        resDiv.innerHTML = "Veuillez entrer un numéro / أدخل رقم التسجيل.";
+        resDiv.classList.add("error");
+        return;
+      }
+
+      Papa.parse("eleves.csv", {
+        download: true,
+        header: true,
+        complete: function(results) {
+          const data = results.data;
+          const eleve = data.find(e => e.Numéro === numero);
+          if (eleve) {
+            resDiv.innerHTML = `
+              <strong>Nom:</strong> ${eleve.Nom} - <strong>Prénom:</strong> ${eleve.Prénom}<br>
+              <strong>Langue:</strong> ${eleve.Langue} - <strong>Niveau:</strong> ${eleve.Niveau}<br>
+              <strong>Résultat:</strong> ${eleve.Résultat}
+            `;
+          } else {
+            resDiv.innerHTML = "Élève non trouvé / المتعلم غير موجود.";
+            resDiv.classList.add("error");
+          }
+        }
+      });
+    }
+  </script>
+</body>
+</html>
