@@ -1,61 +1,69 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Institut Des Langues - Résultats</title>
+    <title>Institut Messaoudi - Résultats</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 40px;
-            background-color: #f9f9f9;
             text-align: center;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            margin-top: 30px;
         }
         img.logo {
-            width: 80px;
-            margin-bottom: 10px;
+            width: 150px;
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 15px;
         }
         h1 {
             color: #333;
-            margin: 0;
+            margin-bottom: 5px;
         }
         h2 {
-            color: #666;
-            margin-top: 5px;
             font-size: 16px;
+            color: #666;
+            margin-top: 0;
         }
         input, button {
             padding: 10px;
             font-size: 16px;
-            margin-top: 20px;
+            margin: 10px;
         }
         #resultat {
-            margin-top: 25px;
+            margin-top: 20px;
             padding: 15px;
-            background-color: #fff;
+            background-color: #eef;
             border-left: 5px solid #4CAF50;
-            width: 60%;
-            margin-left: auto;
-            margin-right: auto;
-            text-align: left;
         }
         .error {
-            border-left: 5px solid #f44336;
+            border-left: 5px solid #f44336 !important;
+            background-color: #fee !important;
         }
     </style>
 </head>
 <body>
+    <div class="container">
+        <img src="logo.png" alt="Logo Institut" class="logo">
+        <h1>Institut Messaoudi</h1>
+        <h2>📍 Rue de l'éducation - Oran</h2>
 
-    <img src="logo.png" alt="Logo Institut" class="logo">
-    <h1>Institut Des Langues</h1>
-    <h2>📍 Rue de l'éducation - Oran</h2>
+        <p>Entrez le numéro d'inscription pour voir les résultats :</p>
+        <input type="text" id="numero" placeholder="Ex: 1001">
+        <button onclick="chercher()">🔍 Rechercher</button>
 
-    <p>Entrez le numéro d'inscription pour voir les résultats :</p>
-    <input type="text" id="numero" placeholder="Ex: 1001">
-    <button onclick="chercher()">🔍 Rechercher</button>
+        <div id="resultat"></div>
+    </div>
 
-    <div id="resultat"></div>
-
+    <!-- PapaParse pour lire le CSV -->
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
     <script>
         function chercher() {
@@ -65,33 +73,33 @@
             resultatDiv.classList.remove('error');
 
             if (!numero) {
-                resultatDiv.innerHTML = "Veuillez entrer un numéro d'inscription.";
+                resultatDiv.innerHTML = "⚠️ Veuillez entrer un numéro d'inscription.";
                 resultatDiv.classList.add('error');
                 return;
             }
 
-            Papa.parse("resultats.csv", {
+            Papa.parse('resultats.csv', {
                 download: true,
                 header: true,
                 complete: function(results) {
                     const data = results.data;
-                    const candidat = data.find(c => c.Numero === numero);
+                    const eleve = data.find(e => e.Numero === numero);
 
-                    if (candidat) {
+                    if (eleve) {
                         resultatDiv.innerHTML = `
-                            <strong>Nom :</strong> ${candidat.Nom}<br>
-                            <strong>Prénom :</strong> ${candidat.Prenom}<br>
-                            <strong>Langue :</strong> ${candidat.Langue}<br>
-                            <strong>Niveau :</strong> ${candidat.Niveau}<br>
-                            <strong>Résultat :</strong> ${candidat.Resultat}
+                            <strong>Nom :</strong> ${eleve.Nom}<br>
+                            <strong>Prénom :</strong> ${eleve.Prenom}<br>
+                            <strong>Langue :</strong> ${eleve.Langue}<br>
+                            <strong>Niveau :</strong> ${eleve.Niveau}<br>
+                            <strong>Résultat :</strong> ${eleve.Resultat}
                         `;
                     } else {
-                        resultatDiv.innerHTML = "Candidat non trouvé.";
+                        resultatDiv.innerHTML = '❌ Étudiant non trouvé.';
                         resultatDiv.classList.add('error');
                     }
                 },
-                error: function(err) {
-                    resultatDiv.innerHTML = "Erreur lors du chargement des résultats.";
+                error: function(error) {
+                    resultatDiv.innerHTML = '❌ Erreur lors du chargement des résultats.';
                     resultatDiv.classList.add('error');
                 }
             });
@@ -99,3 +107,5 @@
     </script>
 </body>
 </html>
+
+      
