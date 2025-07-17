@@ -1,104 +1,101 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <title>Institut Messaoudi - RÈsultats</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f3f3f3;
-      padding: 40px;
-    }
-    header {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      margin-bottom: 30px;
-    }
-    img.logo {
-      height: 60px;
-    }
-    h1 {
-      color: #333;
-    }
-    #info {
-      margin-bottom: 20px;
-    }
-    input, button {
-      padding: 10px;
-      font-size: 16px;
-      margin-right: 10px;
-    }
-    #resultat {
-      margin-top: 20px;
-      background: white;
-      padding: 20px;
-      border-left: 5px solid green;
-    }
-    .error {
-      border-left: 5px solid red;
-    }
-    .adresse {
-      font-size: 14px;
-      color: #555;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>Institut Messaoudi - R√©sultats</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f9f9f9;
+            text-align: center;
+        }
+        img.logo {
+            width: 80px;
+            margin-bottom: 10px;
+        }
+        h1 {
+            color: #333;
+            margin: 0;
+        }
+        h2 {
+            color: #666;
+            margin-top: 5px;
+            font-size: 16px;
+        }
+        input, button {
+            padding: 10px;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        #resultat {
+            margin-top: 25px;
+            padding: 15px;
+            background-color: #fff;
+            border-left: 5px solid #4CAF50;
+            width: 60%;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: left;
+        }
+        .error {
+            border-left: 5px solid #f44336;
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <img src="logo.png" alt="Logo" class="logo" />
-    <div>
-      <h1>Institut Messaoudi</h1>
-      <p class="adresse">=Õ Rue de lÈducation - Oran</p>
-    </div>
-  </header>
 
-  <p id="info">Entrez le numÈro dinscription pour voir les rÈsultats :</p>
-  <input type="text" id="numero" placeholder="Ex: 1001" />
-  <button onclick="chercher()">= Rechercher</button>
+    <img src="logo.png" alt="Logo Institut" class="logo">
+    <h1>Institut Messaoudi</h1>
+    <h2>üìç Rue de l'√©ducation - Oran</h2>
 
-  <div id="resultat"></div>
+    <p>Entrez le num√©ro d'inscription pour voir les r√©sultats :</p>
+    <input type="text" id="numero" placeholder="Ex: 1001">
+    <button onclick="chercher()">üîç Rechercher</button>
 
-  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
-  <script>
-    function chercher() {
-      const numero = document.getElementById("numero").value.trim();
-      const resultatDiv = document.getElementById("resultat");
-      resultatDiv.innerHTML = "";
-      resultatDiv.classList.remove("error");
+    <div id="resultat"></div>
 
-      if (!numero) {
-        resultatDiv.innerHTML = "Veuillez entrer un numÈro d'inscription.";
-        resultatDiv.classList.add("error");
-        return;
-      }
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
+    <script>
+        function chercher() {
+            const numero = document.getElementById('numero').value.trim();
+            const resultatDiv = document.getElementById('resultat');
+            resultatDiv.innerHTML = '';
+            resultatDiv.classList.remove('error');
 
-      Papa.parse("resultats.csv", {
-        download: true,
-        header: true,
-        complete: function (results) {
-          const data = results.data;
-          const candidat = data.find((c) => c.NumÈro === numero);
+            if (!numero) {
+                resultatDiv.innerHTML = "Veuillez entrer un num√©ro d'inscription.";
+                resultatDiv.classList.add('error');
+                return;
+            }
 
-          if (candidat) {
-            resultatDiv.innerHTML = `
-              <strong>Nom :</strong> ${candidat.Nom}<br />
-              <strong>PrÈnom :</strong> ${candidat.PrÈnom}<br />
-              <strong>Langue :</strong> ${candidat.Langue}<br />
-              <strong>Niveau :</strong> ${candidat.Niveau}<br />
-              <strong>RÈsultat :</strong> ${candidat.RÈsultat}
-            `;
-          } else {
-            resultatDiv.innerHTML = "Candidat non trouvÈ.";
-            resultatDiv.classList.add("error");
-          }
-        },
-        error: function () {
-          resultatDiv.innerHTML = "Erreur de chargement des rÈsultats.";
-          resultatDiv.classList.add("error");
-        },
-      });
-    }
-  </script>
+            Papa.parse("resultats.csv", {
+                download: true,
+                header: true,
+                complete: function(results) {
+                    const data = results.data;
+                    const candidat = data.find(c => c.Numero === numero);
+
+                    if (candidat) {
+                        resultatDiv.innerHTML = `
+                            <strong>Nom :</strong> ${candidat.Nom}<br>
+                            <strong>Pr√©nom :</strong> ${candidat.Prenom}<br>
+                            <strong>Langue :</strong> ${candidat.Langue}<br>
+                            <strong>Niveau :</strong> ${candidat.Niveau}<br>
+                            <strong>R√©sultat :</strong> ${candidat.Resultat}
+                        `;
+                    } else {
+                        resultatDiv.innerHTML = "Candidat non trouv√©.";
+                        resultatDiv.classList.add('error');
+                    }
+                },
+                error: function(err) {
+                    resultatDiv.innerHTML = "Erreur lors du chargement des r√©sultats.";
+                    resultatDiv.classList.add('error');
+                }
+            });
+        }
+    </script>
 </body>
 </html>
