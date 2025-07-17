@@ -1,0 +1,115 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Institut Messaoudi - Résultats</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            background-color: white;
+            margin-top: 50px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+        }
+        .logo {
+            width: 100px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #333;
+        }
+        p.address {
+            color: #777;
+            margin: 10px 0;
+        }
+        input[type="text"] {
+            padding: 10px;
+            width: 70%;
+            margin-right: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e7ffe7;
+            border-left: 5px solid #4CAF50;
+            text-align: left;
+        }
+        .notfound {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #ffe7e7;
+            border-left: 5px solid #f44336;
+            color: #c00;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="logo.png" alt="Logo Institut" class="logo">
+        <h1>Institut Messaoudi</h1>
+        <p class="address">📍 Rue de l'éducation - Oran</p>
+        <p>Entrez le numéro d'inscription pour voir les résultats :</p>
+        <input type="text" id="numero" placeholder="Ex: 1001">
+        <button onclick="chercher()">🔍 Rechercher</button>
+        <div id="resultat"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
+    <script>
+        function chercher() {
+            const numero = document.getElementById('numero').value.trim();
+            const resultatDiv = document.getElementById('resultat');
+            resultatDiv.innerHTML = '';
+
+            Papa.parse('resultats.csv', {
+                download: true,
+                header: true,
+                complete: function(results) {
+                    const data = results.data;
+                    const candidat = data.find(c => c["Numéro"] === numero);
+                    if (candidat) {
+                        resultatDiv.innerHTML = `
+                            <div class="result">
+                                <strong>Nom :</strong> ${candidat.Nom}<br>
+                                <strong>Prénom :</strong> ${candidat.Prénom}<br>
+                                <strong>Langue :</strong> ${candidat.Langue}<br>
+                                <strong>Niveau :</strong> ${candidat.Niveau}<br>
+                                <strong>Résultat :</strong> ${candidat.Résultat}
+                            </div>
+                        `;
+                    } else {
+                        resultatDiv.innerHTML = '<div class="notfound">Aucun candidat trouvé.</div>';
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
